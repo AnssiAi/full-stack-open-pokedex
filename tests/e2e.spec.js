@@ -10,4 +10,8 @@ describe('Pokedex', () => {
       )
     ).toBeVisible();
   });
+  test('pokemon page can be navigated to', async ({ page }) => {
+    await page.goto('/pokemon/zubat');
+    await expect(page.getByText('infiltrator')).toBeVisible();
+  });
 });
