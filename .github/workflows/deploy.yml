@@ -1,23 +1,12 @@
 name: Automatic deploy!
 
 on: 
-  status
+  check_suite:
+    types: [completed]
 
 jobs:
-  if_error_or_failure:
+  deploy:
     runs-on: ubuntu-20.04
-    if: >-
-      github.event.state == 'error' ||
-      github.event.state == 'failure'
-    steps:
-      - env:
-          DESCRIPTION: ${{ github.event.description }}
-        run: |
-          echo status is error or failed: $DESCRIPTION
-  if_success:
-    runs-on: ubuntu-20.04
-    if: >-
-      github.event.state == 'success'
     steps:
       - name: Trigger deployment
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
