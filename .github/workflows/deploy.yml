@@ -1,8 +1,10 @@
 name: Automatic deploy!
 
 on: 
-  check_suite:
-    types: [completed]
+  workflow_run:
+    workflows: ["Hello World!", "Deployment Pipeline"]
+    types:
+      - completed
 
 jobs:
   deploy:
