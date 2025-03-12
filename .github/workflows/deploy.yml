@@ -2,13 +2,21 @@ name: Automatic deploy!
 
 on: 
   workflow_run:
-    workflows: ["Hello World!", "Deployment Pipeline"]
+    workflows: ["Deployment Pipeline"]
     types:
       - completed
 
 jobs:
-  deploy:
+  on-success:
     runs-on: ubuntu-20.04
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Trigger deployment
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+        run: echo "Application deployed"
+  on-failure:
+    runs-on: ubuntu-20.04
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: echo "Deployment Pipeline failed"
+
