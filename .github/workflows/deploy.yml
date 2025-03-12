@@ -1,0 +1,17 @@
+name: Automatic deploy!
+
+on: status
+
+jobs:
+  if_error_or_failure:
+    error:
+      runs-on: ubuntu-20.04
+      steps:
+        - name: Error of failure
+          run: echo "Failed to commit"
+  if_success:
+    deploy:
+      runs-on: ubuntu-20.04
+      steps:
+        - name: Trigger deployment
+          run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
