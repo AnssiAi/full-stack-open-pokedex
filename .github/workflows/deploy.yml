@@ -1,6 +1,7 @@
 name: Automatic deploy!
 
-on: status
+on: 
+  status
 
 jobs:
   if_error_or_failure:
