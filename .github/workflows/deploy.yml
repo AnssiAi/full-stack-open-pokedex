@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-20.04
     if: |
       github.event_name == 'push' &&
-      github.event.workflow_run.conclusion == 'success'
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
     steps:
       - name: event name
         run: echo ${{ github.event_name }}
@@ -23,7 +24,8 @@ jobs:
     runs-on: ubuntu-20.04
     if: |
       github.event_name == 'push' &&
-      github.event.workflow_run.conclusion == 'failure'
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.head_branch == 'main'
     steps:
       - name: event name
         run: echo ${{ github.event_name }}
