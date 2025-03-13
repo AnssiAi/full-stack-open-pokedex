@@ -3,8 +3,8 @@ name: Automatic deploy!
 on:
   workflow_run:
     workflows: ['Deployment Pipeline']
-    types:
-      - completed
+    types: [completed]
+    branches: [main]
 
 jobs:
   on-success:
