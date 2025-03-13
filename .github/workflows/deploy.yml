@@ -1,15 +1,15 @@
 name: Automatic deploy!
 
-on: 
+on:
   workflow_run:
-    workflows: ["Deployment Pipeline"]
+    workflows: ['Deployment Pipeline']
     types:
       - completed
 
 jobs:
+  if: ${{ github.event_name == 'push' }}
   on-success:
     runs-on: ubuntu-20.04
-    if: ${{ github.event_name == 'push' }}
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Trigger deployment
@@ -18,9 +18,7 @@ jobs:
         run: echo "Application deployed"
   on-failure:
     runs-on: ubuntu-20.04
-    if: ${{ github.event_name == 'push' }}
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
       - name: Result
         run: echo "Deployment Pipeline failed"
-
