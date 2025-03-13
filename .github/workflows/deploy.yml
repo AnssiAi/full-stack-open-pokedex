@@ -1,24 +1,31 @@
 name: Automatic deploy!
 
-on: 
+on:
   workflow_run:
-    workflows: ["Deployment Pipeline"]
+    workflows: ['Deployment Pipeline']
     types:
       - completed
 
 jobs:
   on-success:
     runs-on: ubuntu-20.04
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: |
+      github.event_name == 'push' &&
+      github.event.workflow_run.conclusion == 'success'
     steps:
+      - name: event name
+        run: echo ${{ github.event_name }}
       - name: Trigger deployment
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Result
         run: echo "Application deployed"
   on-failure:
     runs-on: ubuntu-20.04
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    if: |
+      github.event_name == 'push' &&
+      github.event.workflow_run.conclusion == 'failure'
     steps:
+      - name: event name
+        run: echo ${{ github.event_name }}
       - name: Result
         run: echo "Deployment Pipeline failed"
-
