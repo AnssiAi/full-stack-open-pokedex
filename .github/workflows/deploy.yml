@@ -7,10 +7,10 @@ on:
       - completed
 
 jobs:
-  if: ${{ github.event_name == 'push' }}
   on-success:
     runs-on: ubuntu-20.04
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: |
+      (github.event_name == 'push' && github.event.workflow_run.conclusion == 'success')
     steps:
       - name: Trigger deployment
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
@@ -18,7 +18,8 @@ jobs:
         run: echo "Application deployed"
   on-failure:
     runs-on: ubuntu-20.04
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    if: |
+      (github.event_name == 'push' && github.event.workflow_run.conclusion == 'failure')
     steps:
       - name: Result
         run: echo "Deployment Pipeline failed"
