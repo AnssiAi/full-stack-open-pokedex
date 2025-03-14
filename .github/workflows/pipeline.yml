@@ -60,3 +60,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
           WITH_V: true
+
+  is_success:
+    if: ${{ github.event_name == 'push' }}
+    needs: [version_numbering]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Success
+        run: echo "version_numbering was success"
