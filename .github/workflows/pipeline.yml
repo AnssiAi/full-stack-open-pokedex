@@ -10,7 +10,7 @@ on:
 
 env:
   COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
-  CONDITION: ${{ contains(join(env.COMMIT_MESSAGES, ','), '#skip') }}
+  CONDITION: ${{ contains(join(COMMIT_MESSAGES, ','), '#skip') }}
 
 jobs:
   simple_deployment_pipeline:
