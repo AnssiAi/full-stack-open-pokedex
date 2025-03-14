@@ -11,14 +11,14 @@ env:
 
 jobs:
   on-success:
-    if: |
-      (github.event.workflow_run.conclusion == 'success') && 
-      (github.env.CONDITION == 'false')
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v4
       - name: event name
         run: echo ${{ github.event_name }}
       - name: Trigger deployment
+        if: ${{ github.env.CONDITION == 'false' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Result
         run: echo "Application deployed"
@@ -31,8 +31,9 @@ jobs:
       - name: Result
         run: echo "Deployment Pipeline failed"
   on-skip:
-    if: ${{ github.env.CONDITION == 'true' }}
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v4
       - name: event name
+        if: ${{ github.env.CONDITION == 'true' }}
         run: echo 'Deployment will be skipped'
