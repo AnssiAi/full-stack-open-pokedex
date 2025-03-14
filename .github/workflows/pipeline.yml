@@ -10,7 +10,7 @@ on:
 
 env:
   COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
-  CONDITION: ${{ contains(join($COMMIT_MESSAGES, ','), '#skip') }}
+  CONDITION: ${{ contains(join(env.COMMIT_MESSAGES, ','), '#skip') }}
 
 jobs:
   simple_deployment_pipeline:
@@ -44,11 +44,11 @@ jobs:
       - if: ${{ env.CONDITION == 'true' }}
         run: echo 'This version is skipped'
       - name: condition clause
-        run: echo ${{ join($COMMIT_MESSAGES, ',') }}
+        run: echo ${{ join(env.COMMIT_MESSAGES, ',') }}
       - if: ${{ env.CONDITION == 'false' }}
         run: echo 'This version is included'
       - name: condition clause
-        run: echo ${{ join($COMMIT_MESSAGES, ',') }}
+        run: echo ${{ join(env.COMMIT_MESSAGES, ',') }}
 
   version_numbering:
     needs: [is_skipped]
