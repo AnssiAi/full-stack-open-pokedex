@@ -21,10 +21,16 @@ jobs:
       - name: Result
         run: echo "Application deployed"
   on-failure:
-    if: ${{ github.event.workflow_run.conclusion == 'failure' || (github.env.CONDITION == 'true') }}
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     runs-on: ubuntu-20.04
     steps:
       - name: event name
         run: echo ${{ github.event_name }}
       - name: Result
         run: echo "Deployment Pipeline failed"
+  on-skip:
+    if: ${{ github.env.CONDITION == 'true' }}
+    runs-on: ubuntu-20.04
+    steps:
+      - name: event name
+        run: echo 'Deployment will be skipped'
