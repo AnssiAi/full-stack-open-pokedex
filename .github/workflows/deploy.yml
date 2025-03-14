@@ -8,8 +8,8 @@ on:
 
 jobs:
   on-success:
-    runs-on: ubuntu-20.04
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-20.04
     steps:
       - name: event name
         run: echo ${{ github.event_name }}
@@ -18,8 +18,8 @@ jobs:
       - name: Result
         run: echo "Application deployed"
   on-failure:
-    runs-on: ubuntu-20.04
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-20.04
     steps:
       - name: event name
         run: echo ${{ github.event_name }}
