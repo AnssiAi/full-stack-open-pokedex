@@ -6,9 +6,12 @@ on:
     types: [completed]
     branches: [main]
 
+env:
+  CONDITION: ${{ contains(join(github.event.commits.*.message, ','), '#skip') }}
+
 jobs:
   on-success:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ (github.event.workflow_run.conclusion == 'success') && (github.env.CONDITION == 'false') }}
     runs-on: ubuntu-20.04
     steps:
       - name: event name
@@ -18,7 +21,7 @@ jobs:
       - name: Result
         run: echo "Application deployed"
   on-failure:
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    if: ${{ github.event.workflow_run.conclusion == 'failure' || (github.env.CONDITION == 'true') }}
     runs-on: ubuntu-20.04
     steps:
       - name: event name
