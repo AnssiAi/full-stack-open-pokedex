@@ -42,12 +42,8 @@ jobs:
       - uses: actions/checkout@v4
       - if: ${{ env.CONDITION == 'true' }}
         run: echo 'This version is skipped'
-      - name: condition clause
-        run: echo ${{ join(github.event.commits.*.message, ',') }}
       - if: ${{ env.CONDITION == 'false' }}
         run: echo 'This version is included'
-      - name: condition clause
-        run: echo ${{ join(github.event.commits.*.message, ',') }}
 
   version_numbering:
     needs: [is_skipped]
