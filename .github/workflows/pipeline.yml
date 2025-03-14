@@ -8,6 +8,9 @@ on:
     branches: [main]
     types: [opened, synchronize]
 
+env:
+  CONDITION: ${{ contains(join(github.event.commits.*.message, ','), '#skip') }}
+
 jobs:
   simple_deployment_pipeline:
     runs-on: ubuntu-20.04
@@ -32,9 +35,25 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-  version_numbering:
-    if: ${{github.ref_name == 'main'}}
+  is_skipped:
     needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - if: ${{ env.CONDITION == 'true' }}
+        run: echo 'This version is skipped'
+      - name: condition clause
+        run: echo ${{ join(env.COMMIT_MESSAGES, ',') }}
+      - if: ${{ env.CONDITION == 'false' }}
+        run: echo 'This version is included'
+      - name: condition clause
+        run: echo ${{ join(env.COMMIT_MESSAGES, ',') }}
+
+  version_numbering:
+    needs: [is_skipped]
+    if: |
+      github.ref_name == 'main' ||
+      github.env.CONDITION == 'false'
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
