@@ -65,6 +65,8 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     needs: [version_numbering]
     runs-on: ubuntu-20.04
+    if: ${{ needs.version_numbering.conclusion != 'success' }}
     steps:
-      - name: Success
-        run: echo "version_numbering was success"
+      - uses: actions/checkout@v4
+      - name: Forced exit
+        run: exit 1
