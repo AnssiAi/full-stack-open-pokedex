@@ -28,15 +28,14 @@ jobs:
         run: echo "$COMMIT_MESSAGES"
       - name: Condition resolution
         run: echo ${{ env.CONDITION }}
-      - name: event inputs
-        run: ${{ toJson(github.event.inputs) }}
   on-success:
-    if: ${{ (github.event.workflow_run.conclusion == 'success') && (github.event.inputs.condition == 'false') }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-20.04
     steps:
       - name: event name
         run: echo ${{ github.event_name }}
       - name: Trigger deployment
+        if: ${{ env.CONDITION == 'false' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Result
         run: echo "Application deployed"
@@ -48,9 +47,3 @@ jobs:
         run: echo ${{ github.event_name }}
       - name: Result
         run: echo "Deployment Pipeline failed"
-  on-skip:
-    if: ${{ github.event.inputs.condition == 'true' }}
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Skip condition true
-        run: echo ${{ env.CONDITION }}
