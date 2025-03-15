@@ -47,7 +47,7 @@ jobs:
 
   version_numbering:
     needs: [is_skipped]
-    if: ${{ (github.ref_name == 'main') && (github.event.inputs.condition == 'false') }}
+    if: ${{ (github.ref_name == 'main') }}
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
@@ -55,6 +55,7 @@ jobs:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: '0'
       - name: Bump version and push tag
+        if: ${{ env.CONDITION == ' false' }}
         uses: anothrNick/github-tag-action@1.71.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
