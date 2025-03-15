@@ -6,19 +6,21 @@ on:
     types: [completed]
     branches: [main]
 
-env:
-  CONDITION: ${{ contains(join(github.event.commits.*.message, ','), '#skip') }}
-
 jobs:
-  on-success:
-    if: github.event.workflow_run.conclusion == 'success'
+  run_environment:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
+      - name: commit messages
+        env:
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+        run: echo "$COMMIT_MESSAGES"
+  on-success:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-20.04
+    steps:
       - name: event name
         run: echo ${{ github.event_name }}
       - name: Trigger deployment
-        if: ${{ github.env.CONDITION == 'false' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Result
         run: echo "Application deployed"
@@ -33,7 +35,5 @@ jobs:
   on-skip:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
       - name: event name
-        if: ${{ github.env.CONDITION == 'true' }}
         run: echo 'Deployment will be skipped'
