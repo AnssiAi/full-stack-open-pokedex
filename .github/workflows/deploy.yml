@@ -29,7 +29,7 @@ jobs:
       - name: Condition resolution
         run: echo ${{ env.CONDITION }}
   on-success:
-    if: ${{ (github.event.workflow_run.conclusion == 'success') && (github.env.CONDITION == 'false') }}
+    if: ${{ (github.event.workflow_run.conclusion == 'success') && (env.CONDITION == 'false') }}
     runs-on: ubuntu-20.04
     steps:
       - name: event name
@@ -47,7 +47,7 @@ jobs:
       - name: Result
         run: echo "Deployment Pipeline failed"
   on-skip:
-    if: ${{ github.env.CONDITION == 'true' }}
+    if: ${{ env.CONDITION == 'true' }}
     runs-on: ubuntu-20.04
     steps:
       - name: Skip condition true
