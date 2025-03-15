@@ -6,6 +6,9 @@ on:
     types: [completed]
     branches: [main]
 
+env:
+  CONDITION: ${{ contains(github.event.workflow_run.head_commit.message, '#skip') }}
+
 jobs:
   run_environment:
     runs-on: ubuntu-20.04
@@ -23,8 +26,10 @@ jobs:
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.workflow_run.head_commit.message) }}
         run: echo "$COMMIT_MESSAGES"
+      - name: Condition resolution
+        run: echo ${{ github.env.CONDITION }}
   on-success:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ (github.event.workflow_run.conclusion == 'success') && (github.env.CONDITION == 'false') }}
     runs-on: ubuntu-20.04
     steps:
       - name: event name
@@ -41,3 +46,9 @@ jobs:
         run: echo ${{ github.event_name }}
       - name: Result
         run: echo "Deployment Pipeline failed"
+  on-skip:
+    if: ${{ github.env.CONDITION == 'true' }}
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Skip condition true
+        run: echo ${{ env.CONDITION }}
