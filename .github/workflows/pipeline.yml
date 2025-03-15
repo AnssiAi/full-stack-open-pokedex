@@ -47,7 +47,7 @@ jobs:
 
   version_numbering:
     needs: [is_skipped]
-    if: ${{ (github.ref_name == 'main') && (env.CONDITION == 'false') }}
+    if: ${{ (github.ref_name == 'main') && (github.event.inputs.condition == 'false') }}
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
