@@ -42,7 +42,7 @@ jobs:
         uses: tsickert/discord-webhook@v7.0.0
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-          content: commit ${{ toJson(github.event.workflow_run.head_commit.id) }} deployed.
+          content: https://anssiai-pokedex.onrender.com/ deployed.
           username: anssiai
 
       - name: Is skipped
@@ -61,5 +61,5 @@ jobs:
         uses: tsickert/discord-webhook@v7.0.0
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-          content: commit ${{ toJson(github.event.workflow_run.head_commit.id) }} failed to deploy.
+          content: commit ${{ toJson(github.event.repository.commits_url) }} failed to deploy.
           username: anssiai
