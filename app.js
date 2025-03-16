@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.static('dist'));
 
 app.get('/version', (req, res) => {
-  res.send('11.18.3'); // change this string to ensure a new version deployed
+  res.send('11.18.4'); // change this string to ensure a new version deployed
 });
 
 app.get('/health', (req, res) => {
