@@ -44,6 +44,7 @@ jobs:
           severity: info
           username: anssiai
           details: New build deployed.
+          description: id ${{ toJson(github.event.workflow_run.head_commit.id) }}
           footer: info
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Is skipped
@@ -64,5 +65,6 @@ jobs:
           severity: error
           username: anssiai
           details: Workflow Deployment Pipeline failed.
+          description: id ${{ toJson(github.event.workflow_run.head_commit.id) }}
           footer: error
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
