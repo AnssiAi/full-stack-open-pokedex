@@ -38,7 +38,7 @@ jobs:
         if: ${{ env.CONDITION == 'false' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Deployment success
-        uses: rjstone/discord-webhook-notify@v1.0.2
+        uses: BubbleProd/discord-webhook-notify@v2.0.1
         if: ${{ env.CONDITION == 'false' }}
         with:
           severity: info
@@ -59,7 +59,7 @@ jobs:
       - name: Result
         run: echo "Deployment Pipeline failed"
       - name: Deployment failed
-        uses: rjstone/discord-webhook-notify@v1.0.2
+        uses: BubbleProd/discord-webhook-notify@v2.0.1
         if: ${{ env.CONDITION == 'true' }}
         with:
           severity: error
