@@ -38,15 +38,13 @@ jobs:
         if: ${{ env.CONDITION == 'false' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Deployment success
-        uses: rjstone/discord-webhook-notify@v1.0.4
         if: ${{ success() }}
+        uses: tsickert/discord-webhook@v7.0.0
         with:
-          severity: info
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          content: commit ${{ toJson(github.event.workflow_run.head_commit.id) }} deployed.
           username: anssiai
-          details: New build deployed.
-          description: commit ${{ toJson(github.event.workflow_run.head_commit.id) }}
-          footer: info
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
       - name: Is skipped
         if: ${{ env.CONDITION == 'true' }}
         run: echo "Deployment is skipped"
@@ -59,12 +57,9 @@ jobs:
       - name: Result
         run: echo "Deployment Pipeline failed"
       - name: Deployment failed
-        uses: rjstone/discord-webhook-notify@v1.0.4
         if: ${{ success() }}
+        uses: tsickert/discord-webhook@v7.0.0
         with:
-          severity: error
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          content: commit ${{ toJson(github.event.workflow_run.head_commit.id) }} failed to deploy.
           username: anssiai
-          details: Workflow Deployment Pipeline failed.
-          description: commit ${{ toJson(github.event.workflow_run.head_commit.id) }}
-          footer: error
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
