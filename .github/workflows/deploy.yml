@@ -37,6 +37,15 @@ jobs:
       - name: Trigger deployment
         if: ${{ env.CONDITION == 'false' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+      - name: Deployment success
+        if: ${{ env.CONDITION == 'false' }}
+        uses: rjstone/discord-webhook-notify@v1.0.4
+        with:
+          severity: info
+          username: anssiai
+          details: New build deployed.
+          footer: info
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Is skipped
         if: ${{ env.CONDITION == 'true' }}
         run: echo "Deployment is skipped"
@@ -48,3 +57,11 @@ jobs:
         run: echo ${{ github.event_name }}
       - name: Result
         run: echo "Deployment Pipeline failed"
+      - name: Deployment failed
+        uses: rjstone/discord-webhook-notify@v1.0.4
+        with:
+          severity: error
+          username: anssiai
+          details: Workflow Deployment Pipeline failed.
+          footer: error
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
